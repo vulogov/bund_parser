@@ -1,0 +1,10 @@
+[package]
+name = "bund_parser"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fmterr = "0.1.1"
+pest = "2.7.*"
+pest_derive = "2.7.*"
+rust_dynamic = "0.*.*"
