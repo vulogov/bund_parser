@@ -8,14 +8,24 @@ struct BUNDParser;
 
 pub mod parse;
 pub mod error;
+pub mod code;
 
-pub fn parse(s: &String) {
+pub mod token;
+pub mod lfb;
+pub mod rfb;
+pub mod eoi;
+pub mod integer;
+pub mod unknown;
+
+pub fn parse(c: &mut code::Code, s: &String) {
     let pairs = BUNDParser::parse(Rule::program, s);
     match pairs {
         Ok(_) => {
-            while let Ok(ref pair) = pairs {
+            'outer: while let Ok(ref pair) = pairs {
                 for p in pair.clone() {
-                    parse::parse_pair(p);
+                    if parse::parse_pair(c, p) {
+                        break 'outer;
+                    }
                 }
             }
         }
