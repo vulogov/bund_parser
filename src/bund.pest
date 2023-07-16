@@ -3,16 +3,27 @@ COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
 
 program = _{ SOI ~ terms ~ EOI }
 terms   = _{ term ~ term* }
-term    = { (prefix)? ~ value ~ (suffix)? ~ (left_function_bracket ~ term* ~ right_function_bracket)? }
+term    = { (prefix)? ~ value ~ (postfix)? ~ (left_function_bracket ~ term* ~ right_function_bracket)? }
 value   = _{
+  string |
+  multi_line_string |
+  float |
   integer
 }
 
+multi_line_string  = @{ "\"\"\"" ~ inner ~ "\"\"\"" }
+string             = @{ "\"" ~ inner ~ "\"" }
+inner              = @{ (!("\"" | "\\" | "\u{0000}" | "\u{001F}") ~ ANY)* ~ (escape ~ inner)? }
+escape             = @{ "\\" ~ ("b" | "t" | "n" | "f" | "r" | "\"" | "\\" | unicode | NEWLINE)? }
+unicode            = @{ "u" ~ ASCII_HEX_DIGIT{4} | "U" ~ ASCII_HEX_DIGIT{8} }
+
 integer = @{ ("+" | "-")? ~ int }
+float   = @{ ("+" | "-")? ~ int ~ ("." ~ digits ~ exp? | exp)? }
 int     = @{ "0" | (ASCII_NONZERO_DIGIT ~ digits?) }
 digits  = @{ (ASCII_DIGIT | ("_" ~ ASCII_DIGIT))+ }
+exp     = @{ ("E" | "e") ~ ("+" | "-")? ~ int }
 
 prefix  = @{ ("?" | "`" | "#" | "~" | "$" | "@") }
-suffix  = @{ ("?" | "!") }
+postfix  = @{ ("?" | "!") }
 left_function_bracket  = @{ "[" }
 right_function_bracket = @{ "]" }

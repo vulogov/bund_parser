@@ -14,7 +14,11 @@ pub mod token;
 pub mod lfb;
 pub mod rfb;
 pub mod eoi;
+pub mod prefix;
+pub mod postfix;
 pub mod integer;
+pub mod float;
+pub mod string;
 pub mod unknown;
 
 pub fn parse(c: &mut code::Code, s: &String) {
