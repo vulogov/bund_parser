@@ -16,4 +16,10 @@ mod tests {
         let mut c = code::Code::new();
         parse(&mut c, &"\"This is\nthe place\"[0]".to_string());
     }
+
+    #[test]
+    fn test_string3() {
+        let mut c = code::Code::new();
+        parse(&mut c, &"'Literals are strings too'".to_string());
+    }
 }

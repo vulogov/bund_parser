@@ -19,6 +19,7 @@ pub mod postfix;
 pub mod integer;
 pub mod float;
 pub mod string;
+pub mod identifier;
 pub mod unknown;
 
 pub fn parse(c: &mut code::Code, s: &String) {

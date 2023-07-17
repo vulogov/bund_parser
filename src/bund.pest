@@ -5,23 +5,35 @@ program = _{ SOI ~ terms ~ EOI }
 terms   = _{ term ~ term* }
 term    = { (prefix)? ~ value ~ (postfix)? ~ (left_function_bracket ~ term* ~ right_function_bracket)? }
 value   = _{
+  ident |
   string |
   multi_line_string |
+  literal |
   float |
   integer
 }
 
+ident = _{
+  letter_ident |
+  op_ident
+}
+
 multi_line_string  = @{ "\"\"\"" ~ inner ~ "\"\"\"" }
 string             = @{ "\"" ~ inner ~ "\"" }
+literal            = @{ "'" ~ (!"'" ~ ANY)* ~ "'" }
 inner              = @{ (!("\"" | "\\" | "\u{0000}" | "\u{001F}") ~ ANY)* ~ (escape ~ inner)? }
 escape             = @{ "\\" ~ ("b" | "t" | "n" | "f" | "r" | "\"" | "\\" | unicode | NEWLINE)? }
 unicode            = @{ "u" ~ ASCII_HEX_DIGIT{4} | "U" ~ ASCII_HEX_DIGIT{8} }
 
-integer = @{ ("+" | "-")? ~ int }
-float   = @{ ("+" | "-")? ~ int ~ ("." ~ digits ~ exp? | exp)? }
+integer = @{ (("+" | "-" ) ~ !WHITESPACE )? ~ int | int }
+float   = @{ ("+" | "-")? ~ int ~ "." ~ ( digits ~ exp? | exp)? }
 int     = @{ "0" | (ASCII_NONZERO_DIGIT ~ digits?) }
 digits  = @{ (ASCII_DIGIT | ("_" ~ ASCII_DIGIT))+ }
 exp     = @{ ("E" | "e") ~ ("+" | "-")? ~ int }
+
+letter_ident   = @{ (LETTER) ~ (LETTER | "." )* }
+op      = @{ ( "*" | "-" | "+" | "=" | ">" | "<" | "&" | "^" | "|" | ";" | "," | "%" | "_") }
+op_ident = @{ "(" ~ (op|LETTER) ~ (op|LETTER)* ~ ")" }
 
 prefix  = @{ ("?" | "`" | "#" | "~" | "$" | "@") }
 postfix  = @{ ("?" | "!") }
