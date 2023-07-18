@@ -19,7 +19,8 @@ pub fn process_op_token(c: &mut code::Code, p: &pest::iterators::Pair<Rule>, t: 
     return process_token_internal(c, p, &op_t);
 }
 
-fn process_token_internal(_c: &mut code::Code, p: &pest::iterators::Pair<Rule>, t: &String) -> bool {
+fn process_token_internal(c: &mut code::Code, p: &pest::iterators::Pair<Rule>, t: &String) -> bool {
+    let _ = &c.inc_count();
     println!("Received identifier token: {:#?} = {}", p.as_rule(), t);
     return false;
 }

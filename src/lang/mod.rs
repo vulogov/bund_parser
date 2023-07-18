@@ -9,6 +9,9 @@ struct BUNDParser;
 pub mod parse;
 pub mod error;
 pub mod code;
+pub mod code_error;
+pub mod code_parse;
+pub mod code_values;
 
 pub mod token;
 pub mod lfb;

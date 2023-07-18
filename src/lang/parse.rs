@@ -31,24 +31,30 @@ pub fn parse_pair(c: &mut code::Code, p: pest::iterators::Pair<Rule>) -> bool {
             prefix::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::postfix => {
-            prefix::process_token(c, &p, &token.as_str().to_string());
+            postfix::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::integer => {
+            let _ = &c.inc_count();
             integer::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::float => {
+            let _ = &c.inc_count();
             float::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::string => {
+            let _ = &c.inc_count();
             string::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::multi_line_string => {
+            let _ = &c.inc_count();
             string::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::literal => {
+            let _ = &c.inc_count();
             string::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::letter_ident => {
+            let _ = &c.inc_count();
             return identifier::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::op_ident => {
