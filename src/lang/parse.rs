@@ -35,7 +35,7 @@ pub fn parse_pair(c: &mut code::Code, p: pest::iterators::Pair<Rule>) -> bool {
         }
         Rule::integer => {
             let _ = &c.inc_count();
-            integer::process_token(c, &p, &token.as_str().to_string());
+            return integer::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::float => {
             let _ = &c.inc_count();

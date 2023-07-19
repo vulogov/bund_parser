@@ -15,6 +15,7 @@ mod tests {
     fn test_int1() {
         let mut c = code::Code::new();
         c.parse_str("42");
+        assert_eq!(c.len(), 1);
     }
 
     #[test]
@@ -27,5 +28,6 @@ mod tests {
     fn test_int3() {
         let mut c = code::Code::new();
         c.parse_str("+42");
+        assert_eq!(c.len(), 1);
     }
 }

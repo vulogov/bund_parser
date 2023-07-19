@@ -21,7 +21,7 @@ mod tests {
     #[test]
     fn test_string2() {
         let mut c = code::Code::new();
-        c.parse_str("\"This is\nthe place\"[0]");
+        c.parse_str("\"This is\nthe place\"[]");
         assert_eq!(c.len(), 1);
     }
 
