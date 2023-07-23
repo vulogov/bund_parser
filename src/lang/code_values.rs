@@ -1,10 +1,12 @@
 use crate::lang::code;
 use std::collections::VecDeque;
 use rust_dynamic::value::Value;
-use crate::lang::code_bundvalue::BundValue;
 
-fn conv_args(a: VecDeque<BundValue>) -> Vec<Value> {
-    let mut v: Vec<Value> = vec![];
+fn conv_args(a: VecDeque<Value>) -> Vec<Value> {
+    let mut v: Vec<Value> = Vec::new();
+    for val in a.iter() {
+        v.push(val.clone());
+    }
     return v;
 }
 
@@ -15,20 +17,21 @@ impl code::Code {
         }
         true
     }
-
-    pub fn assign_args(&mut self) -> bool {
-        match self.get_args() {
-            Some(args) => {
-                match self.get_value() {
-                    Some(mut bv) => {
-                        bv.value.attr(conv_args(args));
-                        self.add_bund_value(bv);
-                        return true;
+    pub fn add_arg_to_value(&mut self) {
+        if self.len_args() > 0 {
+            match self.get_args() {
+                Some(args) => {
+                    match self.get_value() {
+                        Some(mut value) => {
+                            value = value.attr(conv_args(args));
+                            self.add_value(value);
+                        }
+                        None => {}
                     }
-                    None => return false,
                 }
+                None => {}
             }
-            None => return false,
         }
+
     }
 }

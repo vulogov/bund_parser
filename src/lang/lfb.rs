@@ -2,6 +2,6 @@ extern crate pest;
 use crate::lang::Rule;
 use crate::lang::code;
 
-pub fn process_token(_c: &mut code::Code, p: &pest::iterators::Pair<Rule>, _t: &String) {
-    println!("Received LFB token: {:#?}", p.as_rule());
+pub fn process_token(c: &mut code::Code, _p: &pest::iterators::Pair<Rule>, _t: &String) {
+    c.new_arg();
 }

@@ -21,7 +21,7 @@ mod tests {
     #[test]
     fn test_string2() {
         let mut c = code::Code::new();
-        c.parse_str("\"This is\nthe place\"[]");
+        c.parse_str("\"This is\nthe place\"[0]");
         assert_eq!(c.len(), 1);
     }
 
@@ -31,4 +31,13 @@ mod tests {
         c.parse_str("'Literals are strings too'");
         assert_eq!(c.len(), 1);
     }
+
+    #[test]
+    fn test_string4() {
+        let mut c = code::Code::new();
+        c.parse_str("\"Hello world\"[42]");
+        let v = c.get_value().unwrap();
+        assert_eq!(v.attr[0].cast_int().unwrap(), 42);
+    }
+
 }

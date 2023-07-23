@@ -1,13 +1,12 @@
 use std::collections::VecDeque;
 use rust_dynamic::value::Value;
-use crate::lang::code_bundvalue::BundValue;
 
 #[derive(Clone)]
 pub struct Code {
     count: u64,
     prefix: VecDeque<String>,
-    vals:  VecDeque<BundValue>,
-    args:  VecDeque<VecDeque<BundValue>>
+    vals:  VecDeque<Value>,
+    args:  VecDeque<VecDeque<Value>>
 }
 
 
@@ -27,36 +26,21 @@ impl Code {
         self.count += 1;
         self.count
     }
-    pub fn add_value(&mut self, v: Value) {
+    pub fn add_value(&mut self, mut v: Value) {
+        if self.len_prefix() > 0 {
+            match self.get_prefix() {
+                Some(prefix) => v.set_tag("prefix", &prefix),
+                None => {}
+            };
+        }
         if self.len_args() > 0 {
             self.add_arg(v);
         } else {
-            let mut bv = BundValue::new(v);
-            if self.len_prefix() > 0 {
-                match self.get_prefix() {
-                    Some(prefix) => bv.prefix = prefix,
-                    None => {}
-                };
-            }
-            self.vals.push_back(bv);
+            self.vals.push_back(v);
         }
     }
 
-    pub fn add_bund_value(&mut self, bv: BundValue) {
-        if self.len_args() > 0 {
-            match self.get_args() {
-                Some(mut a) => {
-                    a.push_back(bv);
-                    self.args.push_back(a);
-                }
-                None => return,
-            }
-        } else {
-            self.vals.push_back(bv);
-        }
-    }
-
-    pub fn get_value(&mut self) -> Option<BundValue> {
+    pub fn get_value(&mut self) -> Option<Value> {
         if self.len_args() > 0 {
             match self.get_args() {
                 Some(mut a) => {
@@ -71,37 +55,28 @@ impl Code {
         }
     }
 
-    pub fn get_actual_value(&mut self) -> Option<BundValue> {
-        self.vals.pop_back()
-    }
-    pub fn add_actual_value(&mut self, bv: BundValue) {
-        self.vals.push_back(bv)
-    }
-
-    pub fn get_args(&mut self) -> Option<VecDeque<BundValue>> {
+    pub fn get_args(&mut self) -> Option<VecDeque<Value>> {
         self.args.pop_back()
     }
     pub fn new_arg(&mut self) {
-        let a: VecDeque<BundValue> = VecDeque::new();
+        let a: VecDeque<Value> = VecDeque::new();
         self.args.push_back(a);
     }
     pub fn new_arg_value(&mut self, v: Value) {
-        let mut a: VecDeque<BundValue> = VecDeque::new();
-        let bv = BundValue::new(v);
-        a.push_back(bv);
+        let mut a: VecDeque<Value> = VecDeque::new();
+        a.push_back(v);
         self.args.push_back(a);
     }
-    pub fn add_arg(&mut self, v: Value) {
+    pub fn add_arg(&mut self, mut v: Value) {
         match self.get_args() {
             Some(mut a) => {
-                let mut bv = BundValue::new(v);
                 if self.len_prefix() > 0 {
                     match self.get_prefix() {
-                        Some(prefix) => bv.prefix = prefix,
+                        Some(prefix) => v.set_tag("prefix", &prefix),
                         None => {}
                     };
                 }
-                a.push_back(bv);
+                a.push_back(v);
                 self.args.push_back(a);
             }
             None => return,
