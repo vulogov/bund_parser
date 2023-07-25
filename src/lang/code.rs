@@ -3,10 +3,10 @@ use rust_dynamic::value::Value;
 
 #[derive(Clone)]
 pub struct Code {
-    count: u64,
-    prefix: VecDeque<String>,
-    vals:  VecDeque<Value>,
-    args:  VecDeque<VecDeque<Value>>
+    count:      u64,
+    prefix:     VecDeque<String>,
+    pub vals:   VecDeque<Value>,
+    args:       VecDeque<VecDeque<Value>>
 }
 
 

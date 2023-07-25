@@ -32,6 +32,9 @@ impl code::Code {
                 None => {}
             }
         }
+    }
 
+    pub fn to_values(&mut self) -> Vec<Value> {
+        conv_args(self.vals.clone())
     }
 }

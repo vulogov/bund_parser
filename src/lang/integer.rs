@@ -8,7 +8,15 @@ pub fn process_token(c: &mut code::Code, _p: &pest::iterators::Pair<Rule>, t: &S
     match Value::from(t.clone()) {
         Ok(str_val) => {
             match str_val.conv(INTEGER) {
-                Ok(val) => {
+                Ok(mut val) => {
+                    if c.len_prefix() > 0 {
+                        match c.get_prefix() {
+                            Some(prefix) => {
+                                val.set_tag("prefix", &prefix);
+                            }
+                            None => return true,
+                        }
+                    }
                     c.add_value(val);
                     return false;
                 }

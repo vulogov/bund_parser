@@ -35,7 +35,7 @@ letter_ident   = @{ (LETTER) ~ (LETTER | "." )* }
 op      = @{ ( "*" | "-" | "+" | "=" | ">" | "<" | "&" | "^" | "|" | ";" | "," | "%" | "_") }
 op_ident = @{ "(" ~ (op|LETTER) ~ (op|LETTER)* ~ ")" }
 
-prefix  = @{ ("?" | "`" | "#" | "~" | "$" | "@") }
+prefix  = @{ ("?" | "`" | "#" | "~" | "$" | "@" | "*") }
 postfix  = @{ ("?" | "!") }
 left_function_bracket  = @{ "[" }
 right_function_bracket = @{ "]" }
