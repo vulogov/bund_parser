@@ -83,4 +83,52 @@ mod tests {
         let mut values = c.to_values();
         assert_eq!(values[0].get_tag("postfix").unwrap(), "?");
     }
+
+    #[test]
+    fn test_parse_string_1() {
+        let mut c = code::Code::new();
+        c.parse_str("'Hello'");
+        let values = c.to_values();
+        assert_eq!(values[0].cast_string().unwrap(), "Hello");
+    }
+
+    #[test]
+    fn test_parse_string_1_1() {
+        let mut c = code::Code::new();
+        c.parse_str("\"Hello\"");
+        let values = c.to_values();
+        assert_eq!(values[0].cast_string().unwrap(), "Hello");
+    }
+
+    #[test]
+    fn test_parse_string_2() {
+        let mut c = code::Code::new();
+        c.parse_str("'Hello'['World']");
+        let values = c.to_values();
+        assert_eq!(values.len(), 1);
+    }
+
+    #[test]
+    fn test_parse_string_3() {
+        let mut c = code::Code::new();
+        c.parse_str("'Hello'['World']");
+        let values = c.to_values();
+        assert_eq!(values[0].attr[0].cast_string().unwrap(), "World");
+    }
+
+    #[test]
+    fn test_parse_string_4() {
+        let mut c = code::Code::new();
+        c.parse_str("*'Hello'['World']");
+        let mut values = c.to_values();
+        assert_eq!(values[0].get_tag("prefix").unwrap(), "*");
+    }
+
+    #[test]
+    fn test_parse_string_5() {
+        let mut c = code::Code::new();
+        c.parse_str("*'Hello'?['World']");
+        let mut values = c.to_values();
+        assert_eq!(values[0].get_tag("postfix").unwrap(), "?");
+    }
 }

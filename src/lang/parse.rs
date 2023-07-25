@@ -43,15 +43,25 @@ pub fn parse_pair(c: &mut code::Code, p: pest::iterators::Pair<Rule>) -> bool {
         }
         Rule::string => {
             let _ = &c.inc_count();
-            string::process_token(c, &p, &token.as_str().to_string());
+            let mut literal = token.as_str().to_string();
+            literal.pop();
+            if literal.len() > 0 {
+                literal.remove(0);
+            }
+            return string::process_token(c, &p, &literal);
         }
         Rule::multi_line_string => {
             let _ = &c.inc_count();
-            string::process_token(c, &p, &token.as_str().to_string());
+            return string::process_token(c, &p, &token.as_str().to_string());
         }
         Rule::literal => {
             let _ = &c.inc_count();
-            string::process_token(c, &p, &token.as_str().to_string());
+            let mut literal = token.as_str().to_string();
+            literal.pop();
+            if literal.len() > 0 {
+                literal.remove(0);
+            }
+            return string::process_token(c, &p, &literal);
         }
         Rule::letter_ident => {
             let _ = &c.inc_count();
